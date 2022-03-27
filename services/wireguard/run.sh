@@ -96,9 +96,15 @@ AllowedIPs = 10.128.0.12/32
 " > /wireguard/wgtwo.conf
 
 fi
+ 
+chmod 600 /wireguard/wgone.conf
+chmod 600 /wireguard/wgtwo.conf
 
 wg-quick down /wireguard/wgone.conf
 wg-quick down /wireguard/wgtwo.conf
+ip rule del table wgone
+ip rule del table wgtwo
 wg-quick up /wireguard/wgone.conf
 wg-quick up /wireguard/wgtwo.conf
 
+while true; do sleep 1000; done
