@@ -1,4 +1,3 @@
-
 FROM balenalib/aarch64-debian
 
 WORKDIR /wireguard

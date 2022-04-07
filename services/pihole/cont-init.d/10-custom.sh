@@ -25,5 +25,5 @@ echo "server.port := ${LIGHTTPD_PORT}" > /etc/lighttpd/external.conf
 echo "${PIHOLE_ADDRESS} local.wg" > /etc/pihole/custom.list
 echo "${PIHOLE_ADDRESS} local.dns" >> /etc/pihole/custom.list
 echo "${PIHOLE_ADDRESS} roaming.dns" >> /etc/pihole/custom.list
-echo "${PIHOLE_ADDRESS} matrix.local.wg" >> /etc/pihole/custom.list
-echo "${PIHOLE_ADDRESS} peertube.wg" >> /etc/pihole/custom.list
+echo "${PIHOLE_ADDRESS} bootstrap.local" >> /etc/pihole/custom.list
+echo "${PIHOLE_ADDRESS} local.cacert" >> /etc/pihole/custom.list
