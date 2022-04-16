@@ -1,8 +1,8 @@
-FROM balenalib/aarch64-debian
+FROM debian:buster
 
 WORKDIR /wireguard
 
-RUN install_packages kmod wget wireguard-tools dnsutils qrencode miniupnpc
+RUN install_packages wget wireguard-tools dnsutils qrencode miniupnpc
 
 COPY run.sh /run.sh
 COPY install.sh /install.sh

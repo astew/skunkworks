@@ -5,13 +5,13 @@
 
 http://*.local {
     file_server browse {
-        root /wireguard
-    }  
+        root /
+    }
 }
 
 http://localhost {
     file_server browse {
-        root /wireguard
+        root /
     }  
 }
 
@@ -29,6 +29,12 @@ http://local.dns {
 http://roaming.dns {
     rewrite * /admin{uri}
     reverse_proxy localhost:10002
+}
+
+pleroma.wg {
+    reverse_proxy localhost:4000 {
+        header_up Host {upstream_hostport}
+    }
 }
 
 :443 {
