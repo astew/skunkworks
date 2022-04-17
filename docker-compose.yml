@@ -1,42 +1,45 @@
 version: '2'
 volumes:
-  postgres:
-  uploads:
-  static:
-  config:
-  matrix:
-  element:
-  dnsconfig:
-  sqldata:
-  netclient:
+  # postgres:
+  # uploads:
+  # static:
+  # config:
+  # matrix:
+  # element:
+  # dnsconfig:
+  # sqldata:
+  # netclient:
   wireguard:
-  wirehub:
+  # wirehub:
   pihole1_config:
   dnsmasq1_config:
-  pihole2_config:
-  dnsmasq2_config:
-  nextcloud:
-  redis:
-  wg:
-  assets:
-  peertube_config:
-  peertube_data:
-  certs:
-  extra_certs:
-  wesher:
-  etc:
-  caddydata:
-  hubweb:
+  # pihole2_config:
+  # dnsmasq2_config:
+  # nextcloud:
+  # redis:
+  # wg:
+  # assets:
+  # peertube_config:
+  # peertube_data:
+  # certs:
+  # extra_certs:
+  # wesher:
+  # etc:
+  # caddydata:
+  # hubweb:
 services:
   wireguard:
     build: ./services/wireguard
     privileged: true
     network_mode: host
+    cap_add:
+      - NET_ADMIN
     restart: "on-failure"
-    labels:
-      io.balena.features.kernel-modules: 1
     volumes:
-      - wireguard:/wireguard
+      - wireguard:/etc/wireguard
+
+
+
 
   pihole1:
     container_name: pihole1
@@ -52,53 +55,56 @@ services:
       - "1.1.1.1"
     network_mode: host
     environment:
-      - INTERFACE=wgone
-      - PIHOLE_INTERFACE=wgone
+      - INTERFACE=wg0
+      - PIHOLE_INTERFACE=wg0
       - PIHOLE_ADDRESS=10.128.0.1
       - LIGHTTPD_PORT=10001
-    labels:
-      io.balena.features.dbus: "1"
 
-  pihole2:
-    container_name: pihole2
-    build: ./services/pihole
-    privileged: true
-    network_mode: host
-    volumes:
-      - "pihole2_config:/etc/pihole"
-      - "dnsmasq2_config:/etc/dnsmasq.d"
-    dns:
-      - "127.0.0.1"
-      - "1.1.1.1"
-    depends_on:
-      - wireguard
-    environment:
-      - INTERFACE=wgtwo
-      - PIHOLE_INTERFACE=wgtwo
-      - PIHOLE_ADDRESS=10.128.0.2
-      - LIGHTTPD_PORT=10002
-    labels:
-      io.balena.features.dbus: "1"
 
-  caddy:
-    build: ./services/caddy
-    restart: always
-    network_mode: host
-    volumes:
-      - element:/element
-      - wireguard:/wireguard
-      - certs:/usr/local/share/ca-certificates
-      - certs:/wireguard/certs
-      - extra_certs:/usr/local/share/ca-certificates/extra
-      - caddydata:/data
-      - wesher:/wesher
-      - hubweb:/var/www/hubzilla
-  wesher:
-    build: ./services/wesher
-    network_mode: host
-    privileged: true
-    volumes:
-      - wesher:/var/lib/wesher
+  # pihole2:
+  #   container_name: pihole2
+  #   build: ./services/pihole
+  #   privileged: true
+  #   network_mode: host
+  #   volumes:
+  #     - "pihole2_config:/etc/pihole"
+  #     - "dnsmasq2_config:/etc/dnsmasq.d"
+  #   dns:
+  #     - "127.0.0.1"
+  #     - "1.1.1.1"
+  #   depends_on:
+  #     - wireguard
+  #   environment:
+  #     - INTERFACE=wgtwo
+  #     - PIHOLE_INTERFACE=wgtwo
+  #     - PIHOLE_ADDRESS=10.128.0.2
+  #     - LIGHTTPD_PORT=10002
+  #   labels:
+  #     io.balena.features.dbus: "1"
+
+
+
+
+
+  # caddy:
+  #   build: ./services/caddy
+  #   restart: always
+  #   network_mode: host
+  #   volumes:
+  #     - element:/element
+  #     - wireguard:/etc/wireguard
+  #     - certs:/usr/local/share/ca-certificates
+  #     - certs:/etc/wireguard/certs
+  #     - extra_certs:/usr/local/share/ca-certificates/extra
+  #     - caddydata:/data
+  #     - wesher:/wesher
+  #     - hubweb:/var/www/hubzilla
+  # wesher:
+  #   build: ./services/wesher
+  #   network_mode: host
+  #   privileged: true
+  #   volumes:
+  #     - wesher:/var/lib/wesher
   # hubzilla:
   #   image: sebt3/hubzilla
   #   networks:
